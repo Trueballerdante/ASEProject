@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="index.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132962802990717566" remote="132962803070000000" Dst="2" />
+<file name="functions.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132951563569326108" remote="132951563640000000" Dst="2" />
+<file name="ViewDevice.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963485041763790" remote="132963485070000000" Dst="2" />
+<file name="ViewDeviceTypes.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963487115820453" remote="132963487140000000" Dst="2" />
+<file name="ViewManufacturers.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963487688110598" remote="132963487720000000" Dst="2" />
+<file name="ListDevices.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963474031285471" remote="132963474070000000" Dst="2" />
+<file name="AddDevice.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963473052888574" remote="132963473090000000" Dst="2" />
+<file name="DeleteDevice.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963473195502433" remote="132963473240000000" Dst="2" />
+<file name="UpdateDevice.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963515304049801" remote="132963515340000000" Dst="2" />
+<file name="UploadFile.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963480010000000" remote="132963480040000000" Dst="2" />
+<file name="Help.php" server="ec2-3-143-241-117.us-east-2.compute.amazonaws.com//var/www/html/" local="132963472779378262" remote="132963472820000000" Dst="2" />
+</dwsync>

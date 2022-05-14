@@ -1,0 +1,98 @@
+<?php
+$dblink=dbconnect("equipment");
+
+$validParameters = array("DeleteDevice", "sn");
+
+foreach($_REQUEST as $key=>$param) {
+	if(!in_array($key, $validParameters)) {
+		header('HTTP/1.1 200 OK');
+		$output[]="Status: Invalid Parameter";
+		$output[]="MSG: An invalid parameter was given: $key";
+		$output[]="";
+		$responseData=json_encode($output);
+		echo $responseData;
+		die();
+	}
+}
+
+$sn=$_REQUEST['sn'];
+
+if($sn==NULL) {
+	header('Content-Type: application/json');
+	header('HTTP/1.1 200 OK');
+	$output[]="Status: NULL Data";
+	$output[]="MSG: Serial Number must not be blank";
+	$output[]="";
+	$responseData=json_encode($output);
+	echo $responseData;
+	die();
+} elseif(strlen($sn) != 32) {
+	header('Content-Type: application/json');
+	header('HTTP/1.1 200 OK');
+	$output[]="Status: Invalid Data";
+	$output[]="MSG: Serial Number must have a length of 32";
+	$output[]="";
+	$responseData=json_encode($output);
+	echo $responseData;
+	die();
+} else {
+
+	$getDeviceTypeSql="Select * from `DeviceTypes`";
+	$getDeviceTypeResult=$dblink->query($getDeviceTypeSql) or die("Something went wrong with $getDeviceTypeSql");
+
+	$deviceTypes = array();
+	$deviceTypeTables = array();
+	while($data=$getDeviceTypeResult->fetch_array(MYSQLI_ASSOC)) {
+		$deviceTypes[$data['id']]=$data['name'];
+		$deviceTypeTables[$data['id']] = str_replace(" ", "_", $data['name']) . "s";
+	}
+	
+	$device;
+	foreach($deviceTypeTables as $key=>$value) {
+		$selectQuery = 'select x.id, deviceTypeId, name, active ';
+		$selectQuery .= 'from Manufacturers as m ';
+		$selectQuery .= 'inner join '.$value.' as x on m.id = x.ManufacturerId ';
+		$selectQuery .= 'where x.serialNumber = "'.$sn.'"';
+		$getSelectQueryResult = $dblink->query($selectQuery) or die("Something went wrong with $selectQuery");
+
+		if($dblink->affected_rows == 1) {		
+			$device=$getSelectQueryResult->fetch_array(MYSQLI_ASSOC);
+			$deviceFound = true;
+			break;
+		} else {
+			$selectQuery = "";
+		}
+	}
+
+	if($deviceFound) {
+		$deviceTypeId = $device["deviceTypeId"];
+		$deviceId = $device["id"];
+		$deleteQuery = 'Delete from '.$deviceTypeTables[$deviceTypeId].' where id = "'.$deviceId.'"';
+		$dblink->query($deleteQuery) or die("Something went wrong with $deleteQuery");
+		
+		$sql="Delete from files_link where deviceId='$deviceId' and deviceTypeId='$deviceTypeId'";
+		$result=$dblink->query($sql) or die("Something went wrong with $sql");
+		
+		header('Content-Type: application/json');
+		header('HTTP/1.1 200 OK');
+		$output[]="Status: OK";
+		$output[]="MSG: The device as successfuly deleted";
+		$data[]='Maufacturer: '.$device['name'];
+		$data[]='Device Type: '.$deviceTypes[$deviceTypeId];
+		$data[]='Serial Number: '.$sn;
+		$isActive = ($device['active'] == 1) ? ("Yes") : ("No");
+		$data[]="Is Active: ".$isActive;
+		$output[]=$data;
+		$responseData=json_encode($output);
+		echo $responseData;
+	} else {
+		header('Content-Type: application/json');
+		header('HTTP/1.1 200 OK');
+		$output[]="Status: Cannot Delete";
+		$output[]="MSG: Device SN: $sn not in database";
+		$output[]="";
+		$responseData=json_encode($output);
+		echo $responseData;
+	}
+}
+?>
